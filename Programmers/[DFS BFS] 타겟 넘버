@@ -1,0 +1,28 @@
+class Solution {
+    static int answer = 0;
+	static int[] num;
+	static int tgt;
+
+	static int solution(int[] numbers, int target) {
+
+		num = numbers;
+		tgt = target;
+
+		dfs(0, 0);
+
+		return answer;
+	}
+
+	static void dfs(int idx, int sum) {
+
+		if (idx == num.length) { // idx가 numbers 끝까지가면 끝!
+			if (sum == tgt)
+				answer++; // 끝까지 갔을때 값이 타겟과 같으면 카운트
+			return;
+		}
+
+		// 인덱스가 끝까지 안갔으면 재귀!
+		dfs(idx + 1, sum + num[idx]);
+		dfs(idx + 1, sum - num[idx]);
+	}
+}
