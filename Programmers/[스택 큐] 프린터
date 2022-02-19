@@ -1,0 +1,50 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+
+	// 문서
+	static class Doc {
+		int pri; // 우선 순위
+		int loc; // 위치
+
+		public Doc(int pri, int loc) {
+			this.pri = pri;
+			this.loc = loc;
+		}
+	}
+
+	public static int solution(int[] priorities, int location) {
+		int answer = 0;
+
+		// 큐 선언
+		Queue<Doc> queue = new LinkedList<>();
+
+		// 일단 다 넣고
+		for (int i = 0; i < priorities.length; i++) {
+			queue.offer(new Doc(priorities[i], i));
+		}
+
+		while ( !queue.isEmpty() ) {
+			Doc tmp = queue.poll();	// 하나 빼고
+			answer++;	// answer 카운트 
+			
+			// tmp와 비교 시작
+			for (Doc n : queue) {
+				if ( n.pri > tmp.pri ) {	// 큐에 tmp보다 우선순위가 높은 것이 존재 한다면 큐에 다시 넣음
+					queue.offer(tmp);	// 큐에 다시 넣고
+					tmp = null;			// tmp 초기화
+					answer--;			// answer 카운트 빼고
+					break;
+				}
+
+			}
+			
+			if ( tmp != null && location == tmp.loc ) {
+				return answer;
+			}	
+		}
+
+		return answer;
+	}
+}
