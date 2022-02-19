@@ -1,0 +1,45 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+        Queue<Integer> bridge = new LinkedList<>(); // 다리 <- 사이즈가 고정된 queue가 없네..
+		int sum = 0; // 트럭 위 다리 무게
+		int answer = 0;	// 시간
+		
+		for (int i = 0; i < truck_weights.length; i++) {
+			int truck = truck_weights[i]; // 트럭 하나 뽑고
+			
+		
+			while ( true ) {
+				
+				if (bridge.isEmpty()) { // 다리에 트럭이 없을 때
+					bridge.offer(truck); // 트럭을 큐에 넣고
+					sum += truck;
+					answer++;
+					break;
+				} else if (!bridge.isEmpty()) { // 다리에 트럭이 있을 때 -> 검사
+					// 큐가 가득 차있나? 안차있나?
+					// 하나 더 올리면 무게가 초과인가? 아닌가?
+
+					// 큐가 안차있으면 -> 검사해보고 하나 더 올릴 수 있음
+					if (bridge.size() < bridge_length) {
+						if (sum + truck <= weight) {
+							bridge.offer(truck);
+							sum += truck;
+							answer++;
+							break;
+						} else {
+							bridge.offer(0);
+							answer++;
+						}
+					} else if (bridge.size() == bridge_length) { // 큐가 차있으면 == 다리 끝까지 가면 하나 내림 -> 다음 트럭
+						sum -= bridge.poll();
+					}
+				}
+			}
+		}
+
+		return answer + bridge_length;
+    }
+}
