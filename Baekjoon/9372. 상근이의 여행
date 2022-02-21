@@ -1,0 +1,70 @@
+package BJ_9372_상근이의여행;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int T;
+	static int N; // 국가의 수
+	static int M; // 비행기 종류
+	static int from, to; // 간선
+	static int ans; // 비행기 종류의 최소 개수
+	static int[][] adj; // 인접 행렬
+	static boolean[] isVisited;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+
+		T = Integer.parseInt(br.readLine());
+
+		// 테케 반복
+		for (int tc = 1; tc <= T; tc++) {
+			st = new StringTokenizer(br.readLine());
+
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+
+			adj = new int[N + 1][N + 1];
+			isVisited = new boolean[N + 1];
+			
+			// 인접행렬 입력
+			for (int i = 0; i < M; i++) {
+				st = new StringTokenizer(br.readLine());
+				
+				from = Integer.parseInt(st.nextToken());
+				to = Integer.parseInt(st.nextToken());
+				
+				adj[from][to] = adj[to][from] = 1;
+			}
+			
+			bfs();
+			System.out.println(ans);
+		}
+	}
+	
+	static Queue<Integer> queue = new ArrayDeque<>();
+
+	static void bfs() {
+		
+		ans = 0; // 출발
+		
+		queue.offer(1); // 1번노드부터 탐색
+		isVisited[1] = true;
+		
+		while ( !queue.isEmpty() ) {
+			int tmp = queue.poll();
+			
+			for (int n = 1; n <= N; n++) { // 1번 노드부터
+				if ( adj[tmp][n] != 1 || isVisited[n] ) continue; // 간선이 없거나, 방문한경우 패스
+				
+				isVisited[n] = true;
+				queue.offer(n);
+				ans++; // 비행기 탈때마다 ++
+			}
+		}
+	}
+}
