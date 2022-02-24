@@ -1,0 +1,101 @@
+package BJ_1260_DFS와BFS;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main_List {
+
+	static int N; // 정점의 개수
+	static int M; // 간선의 개수
+	static int V; // 탐색을 시작할 정점의 번호
+
+	static boolean[] isVisited; // 방문 체크
+
+	public static StringBuilder sb;
+
+	static ArrayList<Integer>[] adjlist;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		V = Integer.parseInt(st.nextToken());
+
+		// 1부터 시작(0은 더미)
+		adjlist = new ArrayList[N + 1];
+		isVisited = new boolean[N + 1];
+
+		// 인접 리스트 초기화
+		for (int i = 1; i <= N; i++) {
+			adjlist[i] = new ArrayList<Integer>();
+		}
+
+		// 인접노드
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+
+			int n1 = Integer.parseInt(st.nextToken());
+			int n2 = Integer.parseInt(st.nextToken());
+
+			adjlist[n1].add(n2);
+			adjlist[n2].add(n1);
+		}
+
+		for (int i = 1; i < adjlist.length; i++) {
+			Collections.sort(adjlist[i]);
+		}
+
+		sb = new StringBuilder();
+		dfs(V);
+		System.out.println(sb);
+
+		// 초기화
+		Arrays.fill(isVisited, false);
+		sb = new StringBuilder();
+
+		bfs(V);
+		System.out.println(sb);
+	}
+
+	// dfs
+	static void dfs(int v) {
+		isVisited[v] = true; // 방문 체크
+		sb.append(v).append(" ");
+
+		for (int n : adjlist[v]) {
+			if (!isVisited[n]) {
+				dfs(n);
+			}
+		}
+	}
+
+	// bfs
+	static void bfs(int v) {
+		Queue<Integer> queue = new ArrayDeque<>();
+
+		// 시작 정점 넣고, 방문 체크
+		queue.offer(v);
+		isVisited[v] = true;
+
+		while (!queue.isEmpty()) {
+			int tmp = queue.poll();
+			sb.append(tmp).append(" ");
+
+			for (int n : adjlist[tmp]) { // 인접리스트 탐색
+				if (isVisited[n])
+					continue; // 방문했으면 패스!
+
+				isVisited[n] = true;
+				queue.offer(n);
+			}
+		}
+	}
+}
