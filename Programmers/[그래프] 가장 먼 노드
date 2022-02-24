@@ -1,0 +1,75 @@
+package programmers_그래프_가장먼노드;
+
+import java.util.ArrayDeque;
+import java.util.Queue;
+
+public class Solution_adjMatrix {
+	
+	public static void main(String[] args) {
+		int n = 6;
+		int[][] edge = { { 3, 6 }, { 4, 3 }, { 3, 2 }, { 1, 3 }, { 1, 2 }, { 2, 4 }, { 5, 2 } };
+
+		int ans = solution(n, edge);
+		System.out.println(ans);
+	}
+
+	static int max = Integer.MIN_VALUE; // 최대 depth
+	static int[][] adjmatrix; // 인접 행렬
+//	static int[] depth; // 거리를 담는 배열
+	
+	static class Node {
+		int v; // 정점
+		int d; // 깊이
+
+		public Node(int v, int d) {
+			super();
+			this.v = v;
+			this.d = d;
+		}
+	}
+
+	static int solution(int n, int[][] edge) {
+
+		int answer = 0;
+
+		adjmatrix = new int[n + 1][n + 1]; // 0은 더미
+//		depth = new int[n + 1]; // 0은 더미
+
+		// 인접 행렬
+		for (int i = 0; i < edge.length; i++) {
+
+			int from = edge[i][0];
+			int to = edge[i][1];
+			adjmatrix[from][to] = adjmatrix[to][from] = 1;
+		}
+
+		// bfs
+		Queue<Node> queue = new ArrayDeque<>();
+		queue.offer(new Node(1, 0));
+		adjmatrix[0][1]++; // 시작
+		
+
+		while (!queue.isEmpty()) {
+			Node tmp = queue.poll();
+
+			for (int i = 1; i <= n; i++) {
+				if (adjmatrix[0][i] != 0) continue; // 방문 했으면 패쓰!
+				
+				if ( adjmatrix[tmp.v][i] == 1 ) { // 연결된 노드라면
+					adjmatrix[0][i] = tmp.d + 1; // 이전 depth + 1
+					
+					max = Math.max(max, adjmatrix[0][i]);  
+					queue.offer(new Node(i, adjmatrix[0][i]));
+				}
+			}
+		}
+
+		// 최대 depth의 수 카운트해서 리턴
+		for (int i = 1; i <= n; i++) {
+			if (adjmatrix[0][i] == max) {
+				answer++;
+			}
+		}
+		return answer;
+	}
+}
