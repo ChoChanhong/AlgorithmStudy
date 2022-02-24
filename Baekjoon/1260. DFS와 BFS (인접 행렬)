@@ -1,0 +1,89 @@
+package BJ_1260_DFS와BFS;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main_adjMatrix {
+	
+	static int N; // 정점의 개수
+	static int M; // 간선의 개수
+	static int V; // 탐색을 시작할 정점의 번호
+	
+	static int[][] adjMatrix; // 인접행렬
+	static boolean[] isVisited; // 방문 체크
+	
+	public static StringBuilder sb;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		V = Integer.parseInt(st.nextToken());
+
+		// 1부터 시작(0은 더미)
+		adjMatrix = new int[N + 1][N + 1];
+		isVisited = new boolean[N + 1];
+
+		// 인접 행렬
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+
+			adjMatrix[from][to] = adjMatrix[to][from] = 1;
+		}
+
+		
+		sb = new StringBuilder();
+		dfs(V);
+		System.out.println(sb);
+
+		// 방문 체크 배열 초기화
+		Arrays.fill(isVisited, false);
+		sb = new StringBuilder();
+
+		bfs(V);
+		System.out.println(sb);
+
+	}
+
+	// dfs
+	static void dfs(int v) {
+		isVisited[v] = true; // 방문 체크
+		sb.append(v).append(" ");
+
+		for (int i = 1; i <= N; i++) {
+			if (adjMatrix[v][i] != 1 || isVisited[i])
+				continue; // 간선이 없거나, 방문을 했으면 패쓰!
+			dfs(i); // 재귀
+		}
+	}
+
+	// bfs
+	static Queue<Integer> queue = new ArrayDeque<>();
+	static void bfs(int v) {
+
+		// 시작 정점 넣고, 방문 체크
+		queue.offer(v);
+		isVisited[v] = true;
+		
+		while ( !queue.isEmpty() ) {
+			int tmp = queue.poll();
+			sb.append(tmp).append(" ");
+			
+			for (int i = 1; i <= N; i++) {
+				if ( adjMatrix[tmp][i] != 1 || isVisited[i] ) continue; // 간선이 없거나, 방문을 했으면 패쓰!
+				
+				queue.offer(i);
+				isVisited[i] = true;
+			}
+		}
+	}
+}
