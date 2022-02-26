@@ -1,0 +1,41 @@
+package SWEA_1289_원재의메모리복구하기;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class review {
+
+	static int T; // 테스트 케이스의 수
+	static char[] input; // 메모리의 원래 값
+
+	public static void main(String[] args) throws Exception {
+
+		// 테케 입력 처리
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		T = Integer.parseInt(br.readLine());
+
+		for (int t = 1; t <= T; t++) {
+			// 테케 별 입력 - 풀이 - 출력
+			int count = 0; // 원래 값으로 복구하기 위한 최소 수정 횟수
+			char current = '0'; // 초기화 상태. 값이 바뀔때마다 현재 값 최신화
+
+			// 입력 문자열 처리 - 입력 자료구조(배열.....)
+			input = br.readLine().toCharArray();
+
+			int cnt = input.length; // for문에서는 매번 반복해서 호출하기 때문에 시간이 덜 걸린다.
+
+			// 풀이
+			for (int i = 0; i < cnt; i++) {
+				if (current == input[i]) continue; // 값의 변화가 없으면 패스!
+
+				// 값의 변화가 있을 경우
+				current = input[i]; // current값 최신화
+				count++; // 수정 횟수 + 1
+
+			}
+
+			// 출력
+			System.out.println("#" + t + " " + count);
+		}
+	}
+}
