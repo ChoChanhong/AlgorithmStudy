@@ -1,0 +1,53 @@
+package BJ_10163_색종이;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	static int N; // 색종이의 장수를 나타내는 정수
+	static int x, y; // 색종이가 놓인 가장 왼쪽 아래칸의 좌표
+	static int w, h; // 색종이의 너비, 높이
+	
+	static int[][] map = new int [101][101];
+	static int[] ans; // 색종이가 보이는 부분의 면적들을 담을 배열
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		N = Integer.parseInt(br.readLine());
+		
+		ans = new int[N + 1];
+		
+		// 입력
+		for (int n = 1; n <= N; n++) {
+			st = new StringTokenizer(br.readLine());
+			
+			x = Integer.parseInt(st.nextToken());
+			y = Integer.parseInt(st.nextToken());
+			w = Integer.parseInt(st.nextToken());
+			h = Integer.parseInt(st.nextToken());
+			
+			for (int i = x; i < x + w; i++) {
+				for (int j = y; j < y + h; j++) {
+					map[i][j] = n;
+				}
+			}
+		}
+		
+		// 풀이
+		for (int i = 0; i < 101; i++) {
+			for (int j = 0; j < 101; j++) {
+				if (map[i][j] == 0) continue; // 색종이 없으면 패스
+				
+				ans[map[i][j]]++;
+			}
+		}
+		
+		// 출력
+		for (int i = 1; i <= N; i++) {
+			System.out.println(ans[i]);
+		}
+	}
+}
