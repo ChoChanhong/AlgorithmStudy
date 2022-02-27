@@ -1,0 +1,43 @@
+package BJ_13300_방배정;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N; // 수학여행에 참가하는 학생 수
+	static int K; // 한 방에 배정할 수 있는 최대 인원 수
+	static int S; // 성별
+	static int Y; // 학년
+	static int room = 0; // 필요한 방의 수
+	
+	static int[][] students = new int[2][6];
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		
+		// 입력
+		for (int n = 0; n < N; n++) {
+			st = new StringTokenizer(br.readLine());
+			
+			S = Integer.parseInt(st.nextToken());
+			Y = Integer.parseInt(st.nextToken()) - 1;
+			
+			students[S][Y]++; // 일단 학생들을 분류하고
+		}
+		
+		// 풀이
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 6; j++) {
+            	// 분류한 학생들의 수에 따라 방을 카운트
+				room += Math.ceil(students[i][j] / (double) K);
+			}
+		}
+		
+		System.out.println(room);
+	}
+}
