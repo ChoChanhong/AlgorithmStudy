@@ -18,9 +18,9 @@ public class Main_Prim {
 		int to;
 		int weight;
 
-		public Edge(int to, int value) {
+		public Edge(int to, int weight) {
 			this.to = to;
-			this.weight = value;
+			this.weight = weight;
 		}
 
 		@Override
@@ -64,17 +64,16 @@ public class Main_Prim {
 		pqueue.offer(new Edge(start, 0));
 		while (!pqueue.isEmpty()) {
 			Edge tmp = pqueue.poll();
-			int node = tmp.to;
+			int to = tmp.to;
 			int weight = tmp.weight;
 
-			if (isVisited[node])
-				continue;
-			isVisited[node] = true;
+			if (isVisited[to]) continue;
+			isVisited[to] = true;
 			total += weight;
 
-			for (Edge next : list[node]) {
-				if (!isVisited[next.to]) {
-					pqueue.offer(next);
+			for (Edge e : list[to]) {
+				if (!isVisited[e.to]) {
+					pqueue.offer(e);
 				}
 			}
 		}
