@@ -1,0 +1,65 @@
+package BJ_2644_촌수계산;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N; // 전체 사람 수
+	static int start, end; // 촌수를 계산해야하는 사람
+	static int M; // 부모 자식들 간의 관계의 개수
+
+	static int[][] adjMatrix; // 인접 행렬
+	static int[] kinship; // 촌수를 담을 배열
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+
+		adjMatrix = new int[N + 1][N + 1]; // 0은 더미
+		kinship = new int[N + 1]; // 0은 더미
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		start = Integer.parseInt(st.nextToken());
+		end = Integer.parseInt(st.nextToken());
+
+		M = Integer.parseInt(br.readLine());
+
+		// 인접행렬
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+
+			adjMatrix[from][to] = adjMatrix[to][from] = 1;
+		}
+
+		bfs(start, end);
+
+		if (kinship[end] == 0) System.out.println("-1"); // 관계 X -> -1
+		else System.out.println(kinship[end]); // 아니면 촌수 출력
+	}
+
+	static Queue<Integer> queue = new ArrayDeque<>();
+
+	static void bfs(int s, int e) {
+		queue.offer(s);
+
+		while (!queue.isEmpty()) {
+			int tmp = queue.poll();
+
+			if (tmp == e)
+				break;
+
+			for (int n = 1; n <= N; n++) {
+				if (adjMatrix[tmp][n] != 1 || kinship[n] != 0)
+					continue; // 관계가 없거나 촌수가 있으면 패스!
+
+				kinship[n] = kinship[tmp] + 1; // tmp보다 1 더 먼 관계
+				queue.offer(n);
+			}
+		}
+	}
+}
