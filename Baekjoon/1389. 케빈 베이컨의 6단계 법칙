@@ -1,0 +1,89 @@
+package BJ_1389_케빈베이컨의6단계법칙;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N; // 유저의 수
+	static int M; // 친구 관계의 수
+	static int min = Integer.MAX_VALUE;
+
+	static int[][] adjMatrix; // 인접 행렬
+	static boolean[] isChecked; // 체크 여부
+	static int[] number; // 케빈 베이컨의 수 
+
+	public static void main(String args[]) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		adjMatrix = new int[N + 1][N + 1];
+		number = new int[N + 1];
+
+		// 입력
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			adjMatrix[from][to] = 1;
+			adjMatrix[to][from] = 1;
+		}
+
+		// 풀이
+		for (int i = 1; i <= N; i++) {
+			isChecked = new boolean[N + 1];
+			bfs(i);
+		}
+		
+        // 최솟값 찾아서
+		for (int i = 1; i <= N; i++) {
+			min = Math.min(min, number[i]);
+			
+		}
+
+		// 최솟값 인덱스 출력
+		for (int i = 1; i <= N; i++) {
+			if (number[i] == min) {
+				System.out.println(i);
+				break;
+			}
+		}
+		
+	}
+
+	static class Node {
+		int vertex;
+		int depth;
+
+		Node(int vertex, int depth) {
+			this.vertex = vertex;
+			this.depth = depth;
+		}
+	}
+
+	static Queue<Node> queue = new ArrayDeque<>();
+	public static void bfs(int v) {
+		
+		isChecked[v] = true;
+		queue.offer(new Node(v, 0));
+
+		while (!queue.isEmpty()) {
+			Node tmp = queue.poll();
+			
+			for (int n = 1; n <= N; n++) {
+				
+				if (adjMatrix[tmp.vertex][n] != 1 || isChecked[n]) continue; // 친구가 아니거나, 체크 했으면 패스!
+				
+					queue.offer(new Node(n, tmp.depth + 1));
+					isChecked[n] = true;
+					number[n] += tmp.depth + 1;
+
+			}
+		}
+	}
+}
