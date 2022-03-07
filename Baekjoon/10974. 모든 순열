@@ -1,0 +1,43 @@
+package BJ_10974_모든순열;
+
+import java.util.Scanner;
+
+public class Main {
+
+	static int[] arr;
+	static boolean isVisited[];
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+
+		arr = new int[n + 1];
+		isVisited = new boolean[n + 1];
+
+		for (int i = 1; i <= n; i++) {
+			isVisited[i] = true;
+			Perm(n, i, 1);
+			isVisited[i] = false;
+		}
+	}
+	
+	static void Perm(int n, int start, int depth) {
+		arr[depth] = start;
+
+		if (depth == n) {
+			for (int i = 1; i <= n; i++)
+				System.out.print(arr[i] + " ");
+			System.out.println();
+			return;
+		}
+
+		for (int i = 1; i <= n; i++) {
+			if (isVisited[i] == true)
+				continue;
+			isVisited[i] = true;
+			Perm(n, i, depth + 1);
+			isVisited[i] = false;
+		}
+	}
+}
