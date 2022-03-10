@@ -4,40 +4,48 @@ import java.util.Scanner;
 
 public class Main {
 
-	static int[] arr;
-	static boolean isVisited[];
-
-	public static void main(String[] args) {
-
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
-
-		arr = new int[n + 1];
-		isVisited = new boolean[n + 1];
-
-		for (int i = 1; i <= n; i++) {
-			isVisited[i] = true;
-			Perm(n, i, 1);
-			isVisited[i] = false;
-		}
-	}
+	static int N; // 전체 개수
 	
-	static void Perm(int n, int start, int depth) {
-		arr[depth] = start;
+	static int[] select; // 선택 수 배열
+	static boolean[] isSelected; // 중복 체크
+	static StringBuilder sb = new StringBuilder();
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		N = sc.nextInt();
+		
+		select = new int[N]; // 선택 수를 담을 배열이므로 크기가 N인 배열으로 만들어준다.
+		isSelected = new boolean[N + 1]; // 0은 더미
+		
+		Perm(0);
+		System.out.println(sb);
+	}
 
-		if (depth == n) {
-			for (int i = 1; i <= n; i++)
-				System.out.print(arr[i] + " ");
-			System.out.println();
+	static void Perm(int cnt) { // cnt: 직전까지 선택된 개수
+		// 기저 조건
+		if ( cnt == N ) { // N개를 다 선택하면, sb에 담고 탈출
+			
+			for (int i = 0; i < N; i++) {
+				sb.append(select[i]).append(" ");
+			}
+			sb.append("\n");
+			
 			return;
 		}
-
-		for (int i = 1; i <= n; i++) {
-			if (isVisited[i] == true)
-				continue;
-			isVisited[i] = true;
-			Perm(n, i, depth + 1);
-			isVisited[i] = false;
+		
+		// 입력받은 모든 수를 선택해보고 중복일 경우 제외시킨다.
+		for (int i = 1; i <= N; i++) {
+			if (isSelected[i]) continue; // 중복 체크
+			
+			// 중복이 아닐 경우
+			select[cnt] = i; // 수를 하나 뽑아 선택 수 배열에 추가
+			isSelected[i] = true; // 선택 체크
+			
+			// 다음 수 선택(재귀 사용)
+			Perm(cnt + 1);
+			
+			isSelected[i] = false; // 재귀 이후 다른 선택을 위해 false로 변경
 		}
 	}
 }
