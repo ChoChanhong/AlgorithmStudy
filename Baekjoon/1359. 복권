@@ -1,0 +1,52 @@
+package BJ_1359_복권;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	static int N; // 전체 수
+	static int M; // 선택 수
+	static int K; // 당첨 수
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+
+		// 뽑기
+		long choice = Comb(N, M);
+
+		// 당첨 뽑기
+		long win = Win(N, M, K);
+		
+		System.out.println( (double) win / choice );
+
+	}
+
+	static long Comb(int n, int r) {
+		// 기저 조건
+		if (n == r || r == 0) return 1;
+
+		// nCr = n-1Cr-1 + n-1Cr
+		return Comb(n - 1, r - 1) + Comb(n - 1, r);
+	}
+
+	static long Win(int n, int r, int k) {
+		// 당첨된 경우: 최소 k개 일치(k개 일치 + (k + 1)개 일치 + ... + r개 일치)
+		long cnt = 0;
+
+		for (int i = k; i <= r; i++) {
+			if (n - r < r - i) continue; // 쉽게 말해 NCR에서 N < R이면 패쓰!
+
+			// r개 중 k개를 뽑고, 나머지(n-r) 중 r-k개를 뽑는다.
+			cnt += Comb(r, i) * Comb(n - r, r - i);
+		}
+
+		return cnt;
+	}
+}
