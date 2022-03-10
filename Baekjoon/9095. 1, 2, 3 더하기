@@ -3,8 +3,11 @@ package BJ_9095_123더하기;
 import java.util.Scanner;
 
 public class Main {
+	
 	static int T; // 테스트 케이스의 수
-	static int cnt; // 방법의 수
+	static int N; // 만들어야 하는 수
+	static int sum; // 지금까지의 합
+	static int total; // 방법의 수
 
 	public static void main(String[] args) {
 
@@ -14,31 +17,32 @@ public class Main {
 
 		for (int tc = 1; tc <= T; tc++) {
 
-			int n = sc.nextInt();
+			N = sc.nextInt(); // 만들어야 하는 수
 
-			int sum = 0;
-			cnt = 0;
+			sum = 0;
+			total = 0;
 
-			sol(sum, n);
+			rePerm();
 
-			System.out.println(cnt);
+			System.out.println(total);
 		}
 	}
-
-	static void sol(int sum, int n) {
-		if (sum == n) { // 1, 2, 3의 합이 n과 같아지면
-			cnt++; // 방법수 ++
+	
+	static void rePerm() {
+		// 기저 조건
+		if (sum == N) { // 합과 N이 같아지면 성공!
+			total++; // 방법수 ++
 			return; // 탈출
 		}
 		
-		else if (sum > n) { // 1, 2, 3의 합이 n보다 커지면 
+		else if (sum > N) { // 합이 N보다 커지면 실패!  
 			return; // 탈출
 		}
 		
 		for (int i = 1; i <= 3; i++) {
-			sum += i; // 1, 2, 3 더해봄
-			sol(sum, n); // 재귀
-			sum -= i; // 다음 숫자
+			sum += i; // 수를 차례로 더한다.
+			rePerm(); // 다음 수를 더한다(재귀 활용)
+			sum -= i; // 재귀 이후 다음 숫자를 선택하기 위해 다시 빼준다.
 		}
 	}
 }
