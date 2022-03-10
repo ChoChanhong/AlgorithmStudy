@@ -1,17 +1,20 @@
 package BJ_14621_나만안되는연애;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-
 	static int N; // 학교의 수
 	static int M; // 학교를 연결하는 도로의 수
+	static int cost = 0;
 
-	static int[] parents;
-	static Edge[] edgeList;
+	static char[] gender; // 학교 종류 확인 배열
+
+	static int[] parents; // 대표자
+	static Edge[] edgeList; // 간선 리스트
 
 	static class Edge implements Comparable<Edge> {
 		int from;
@@ -32,9 +35,67 @@ public class Main {
 
 	}
 
+	public static void main(String[] args) throws Exception {
+
+		System.setIn(new FileInputStream("input.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		gender = new char[N + 1]; // 0은 더미
+		parents = new int[N + 1]; // 0은 더미
+		edgeList = new Edge[M];
+
+		st = new StringTokenizer(br.readLine());
+		for (int i = 1; i <= N; i++) {
+			gender[i] = st.nextToken().charAt(0);
+		}
+
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int form = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			int weight = Integer.parseInt(st.nextToken());
+
+			if (gender[form] == gender[to]) {
+				weight = 0; // 같은 종류 학교면 가중치 0
+			}
+
+			edgeList[i] = new Edge(form, to, weight);
+		}
+
+		Arrays.sort(edgeList); // 간선 비용 오름차순 정렬
+
+		makeSet();
+
+		int cnt = 0; // 연결된 간선 수
+
+		for (int i = 0; i < M; i++) {
+
+			Edge edge = edgeList[i];
+
+			if (edge.weight == 0) continue; // 같은 종류 학교면 연결안함
+
+			if (union(edge.from, edge.to)) {
+				cost += edge.weight; // 가중치를 더해주고
+				cnt++; //연결된 가선 수++
+			}
+
+			if (cnt == N - 1) break; // 다 연결되면 끝
+		}
+
+		if (cnt == N - 1) {
+			System.out.println(cost);
+		} else
+			System.out.println(-1);
+	}
+
 	// 단위집합 생성
 	public static void makeSet() {
-		parents = new int[N + 1];
+		parents = new int[N + 1]; // 0은 더미
+
 		// 자신의 부모 노드를 자신의 값으로 세팅
 		for (int i = 1; i <= N; i++) {
 			parents[i] = i;
@@ -53,56 +114,10 @@ public class Main {
 		int aRoot = findSet(a);
 		int bRoot = findSet(b);
 
-		if (aRoot == bRoot)
+		if (aRoot == bRoot) // 대표자가 같으면 합칠 필요 X
 			return false;
 
 		parents[bRoot] = aRoot;
 		return true;
-	}
-
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-
-		char[] university = new char[N + 1];
-
-		st = new StringTokenizer(br.readLine());
-		for (int i = 1; i <= N; i++) {
-			university[i] = st.nextToken().charAt(0);
-		}
-
-		edgeList = new Edge[M];
-
-		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int from = Integer.parseInt(st.nextToken());
-			int to = Integer.parseInt(st.nextToken());
-			int weight = Integer.parseInt(st.nextToken());
-
-			edgeList[i] = new Edge(from, to, weight);
-		}
-
-		makeSet();
-
-		Arrays.sort(edgeList);
-
-		long result = 0;
-		int cnt = 0;
-
-		// 크루스칼 알고리즘 수행.
-		for (Edge edge : edgeList) {
-
-			if (union(edge.from, edge.to) && university[edge.from] == university[edge.to]) {
-				result += edge.weight;
-				if (++cnt == N - 1)
-					break;
-
-			}
-			System.out.println(result);
-		}
-
 	}
 }
