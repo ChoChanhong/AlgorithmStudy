@@ -1,0 +1,48 @@
+package BJ_16922_로마숫자만들기;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+
+	static int N; // 사용할 수 있는 문자의 개수
+	
+	static int[] numbers = { 1, 5, 10, 50 };
+	static int[] select; // 선택 수 배열
+	static ArrayList<Integer> al = new ArrayList<>(); // 로마 숫자로 만들 수 있는 서로 다른 수를 담을 al
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		
+		select = new int[N];
+		
+		reComb(0, 0);
+		
+		System.out.println(al.size());
+	}
+
+	static void reComb(int cnt, int start) { // cnt: 직전까지 선택된 개수, start: 뽑기 시작한 수
+		// 기저 조건
+		if ( cnt == N ) { // R개를 다 선택하면, 출력 후 탈출
+			
+			// 로마 숫자들의 합을 구한다.
+			int sum = 0;
+			
+			for (int i = 0; i < N; i++) {
+				sum += select[i];
+			}
+			
+			// 로마 숫자들의 합을 중복 체크 후, 값이 없으면 al에 추가해준다.
+			if ( !al.contains(sum) ) al.add(sum);
+			
+			return;
+		}
+		
+		for (int i = start; i < 4; i++) { // 4 = numbers.length
+			select[cnt] = numbers[i]; // 수를 하나 뽑아 선택 수 배열에 추가
+			reComb(cnt+1, i); // 다음 수는 현재 뽑은 수부터 시작하도록 i를 전달
+		}
+		
+	}
+}
