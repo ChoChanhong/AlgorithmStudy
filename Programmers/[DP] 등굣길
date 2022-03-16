@@ -1,0 +1,52 @@
+package Programmers_등굣길;
+
+public class Solution {
+
+	static boolean[][] map; // 웅덩이 지도
+	static int[][] dp; // 최단 경로 값
+
+	// 우, 하
+	static int[] dy = { 0, 1 };
+	static int[] dx = { 1, 0 };
+
+	public static void main(String[] args) {
+		int M = 4;
+		int N = 3;
+
+		int[][] Puddles = { { 2, 2 } };
+
+		System.out.println(solution(N, M, Puddles) % 1_000_000_007);
+	}
+
+	public static int solution(int m, int n, int[][] puddles) {
+
+		map = new boolean[n + 1][m + 1]; // 0은 더미
+		dp = new int[n + 1][m + 1]; // 0은 더미
+
+		// 물 웅동이: true
+		for (int i = 0; i < puddles.length; i++) {
+			map[puddles[i][1]][puddles[i][0]] = true;
+		}
+
+		dp[1][1] = 1; // 출발
+
+		for (int y = 1; y <= n; y++) {
+			for (int x = 1; x <= m; x++) {
+				
+				// 풀이: dp[y][x] = dp[y - 1][x] + dp[y][x - 1]
+				for (int d = 0; d < 2; d++) {
+
+					int ny = y + dy[d];
+					int nx = x + dx[d];
+
+					if (ny < 1 || nx < 1 || ny >= n + 1 || nx >= m + 1) continue; // map을 벗어나면 패스!
+					if ( map[ny][nx] ) continue; // 물웅덩이가 있으면 패스!
+
+					dp[ny][nx] += dp[y][x];
+				}
+			}
+		}
+
+		return dp[n][m]; // 도착
+	}
+}
