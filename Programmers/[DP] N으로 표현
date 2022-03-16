@@ -1,0 +1,69 @@
+package Programmers_N으로표현;
+
+import java.util.ArrayList;
+
+/*
+ # tc1: N = 5, number = 12, return = 4;
+ # tc2: N = 2, number = 11, return = 3;
+ */
+
+public class Solution {
+	static ArrayList<Integer>[] al; // 연산 결과를 저장할 ArrayList 배열
+
+	public static void main(String[] args) {
+    	// #tc1
+		int N = 5; // 숫자
+		int number = 12; // 표현할 수
+
+		System.out.println(solution(N, number));
+	}
+
+	public static int solution(int N, int number) {
+
+		al = new ArrayList[9]; // 8까지(0은 더미)
+
+		for (int n = 1; n <= 8; n++) {
+			find(N, n); // 연산 실행
+			
+			// 연산 실행 결과 number가 만들어지면 return n;
+			if (al[n].contains(number)) {
+				return n;
+			}
+		}
+
+		return -1; // 최솟값이 8보다 크면 -1을 리턴
+	}
+
+	public static ArrayList<Integer> find(int N, int cnt) {
+
+		al[cnt] = new ArrayList<Integer>(); // al 초기화
+		
+		// 유형 1: 숫자 붙이기
+		int connectedN = 0;
+		for (int i = 1; i <= cnt; i++) {
+			connectedN = 10 * connectedN + N; // N을 cnt개 붙여서 수 만들기
+		}
+		al[cnt].add(connectedN); // 만들어진 수를 al에 넣기
+		
+		// 유형 2: 사칙연산
+		// cnt = 1일때는 사칙연산 불가 ===> cnt 2부터!
+		for (int index = 1; index < cnt; index++) {
+			
+			int nextIndex = cnt - index;
+			
+			if (al[index] != null) find(N, index);
+			if (al[nextIndex] != null) find(N, nextIndex);	
+			
+			for (int origin : al[index]) {
+				for (int next : al[nextIndex]) {
+					al[cnt].add(origin + next);
+					al[cnt].add(origin - next);
+					al[cnt].add(origin * next);
+					if (next != 0) al[cnt].add(origin / next); // 나누기의 경우 next = 0이면 안
+				}
+			}
+		}
+		
+		return al[cnt];
+	}
+}
