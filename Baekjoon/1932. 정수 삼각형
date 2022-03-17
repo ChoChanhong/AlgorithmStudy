@@ -1,0 +1,48 @@
+package BJ_1932_정수삼각형;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+ 
+public class Main {
+
+	static int N; // 삼각형의 크기
+	
+	static int[][] triangle; // 정수 삼각형
+	static int[][] dp; // 값 저장
+ 
+	public static void main(String[] args) throws IOException {
+ 
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
+		
+		N = Integer.parseInt(br.readLine());
+ 
+		triangle = new int[N][N];
+		dp = new int[N][N];
+		
+		// 입력
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < i + 1; j++) {
+				triangle[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+
+		dp[N - 1] = triangle[N - 1].clone(); // 가장 마지막 행의 값 복사
+
+		System.out.println(getNum(0, 0));
+	}
+
+	static int getNum(int depth, int index) {
+
+		// 마지막 행이면 마지막 dp값 리턴
+		if (depth == dp.length - 1) return dp[depth][index];
+
+		// 방문안했으면 다음 깊이의 좌, 우 값 비교해서 큰 값이랑 더해준다.
+		if (dp[depth][index] == 0) dp[depth][index] = Math.max(getNum(depth + 1, index), getNum(depth + 1, index + 1)) + triangle[depth][index];
+
+		return dp[depth][index];
+	}
+}
