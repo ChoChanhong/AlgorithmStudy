@@ -15,7 +15,7 @@ class Solution {
 
 	static void dfs(int idx, int sum) {
 
-		if (idx == num.length) { // idx가 numbers 끝까지가면 끝!
+		if (idx == num.length) { // idx가 numbers 끝까지가면 끝
 			if (sum == tgt)
 				answer++; // 끝까지 갔을때 값이 타겟과 같으면 카운트
 			return;
