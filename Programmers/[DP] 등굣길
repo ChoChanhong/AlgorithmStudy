@@ -1,6 +1,6 @@
 package Programmers_등굣길;
 
-public class Solution1_2 {
+public class Solution {
 
 	static boolean[][] map; // 웅덩이 지도
 	static int[][] dp; // 최단 경로 값
