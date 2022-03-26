@@ -66,7 +66,7 @@ public class Main_BFS {
 
 			for (int n : al[tmp]) {
 				if (isVisited[n])
-					continue; // 방문했으면 패스!
+					continue; // 방문했으면 패스!!
 
 				parents[n] = tmp; // n의 부모 노드는 tmp
 
