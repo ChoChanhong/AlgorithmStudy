@@ -1,0 +1,55 @@
+package BJ_7785_회사에있는사람;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		
+		
+		int n = Integer.parseInt(br.readLine());
+		
+		String[][] names = new String[n][2];
+		
+		for (int i = 0; i < n; i++)
+			names[i] = br.readLine().split(" ");
+		
+		HashMap<String, String> lists = new HashMap<String, String>();
+		
+		for (int i = 0; i < n; i++) {
+			if (names[i][1].equals("enter"))
+				lists.put(names[i][0], names[i][1]);
+			else
+				lists.remove(names[i][0]);
+		}
+		
+		Set<String> keys = lists.keySet();
+		Iterator<String> it = keys.iterator();
+		String[] result = new String[lists.size()];
+		
+		int index = 0;
+		while (it.hasNext()) {
+			result[index] = it.next();
+			index++;
+		}
+		
+		Arrays.sort(result);
+		
+		for (int i = 0; i < result.length / 2; i++) {
+			String tmp = result[i];
+			result[i] = result[result.length - 1 - i];
+			result[result.length - 1 - i] = tmp;
+		}
+		
+		for (String str : result)
+			sb.append(str).append("\n");
+	}
+}
