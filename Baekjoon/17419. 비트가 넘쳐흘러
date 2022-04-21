@@ -1,0 +1,29 @@
+package BJ_17419_비트가넘쳐흘러;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Main {
+	static int N;
+	static char[] K;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		
+//		K = new char[N];
+		K = br.readLine().toCharArray();
+		
+		int cnt = 0;
+
+		for (int i = 0; i < N; i++) {
+			if (K[i] == '1') cnt++;
+		}
+		
+		System.out.println(cnt);
+	}
+}
+
+// K = K - (K & ((~K) + 1)): (~K) + 1는 K의 보수 
+//   = K - (K & -K): K & -K는 최하위 1 
+//   = 결국 1하나씩 빠지는 연산
