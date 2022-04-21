@@ -15,7 +15,7 @@ public class Main {
 		int C = Integer.parseInt(st.nextToken()) % 2;
 
 		int ans = A;
-		if ( C == 1 ) ans = A ^ B;
+		if ( C == 1 ) ans ^= B; // XOR연산
 		
 		System.out.println(ans);
 	}
