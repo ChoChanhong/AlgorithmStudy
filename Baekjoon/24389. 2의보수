@@ -1,0 +1,24 @@
+package BJ_24389_2의보수;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N = Integer.parseInt(br.readLine());
+		int c = ~N + 1; // 2의 보수: 모든 비트 반전 후 + 1
+		
+		// 서로 다른 비트 체크 <- XOR
+		char[] res = Integer.toBinaryString(N ^ c).toCharArray(); // 10진수 -> 2진수
+		int cnt = 0; // 서로 다른 비트 수 카운트
+		
+		for (char bit : res) {
+			if (bit == '1') cnt++;
+		}
+		
+		System.out.print(cnt);
+	}
+}
