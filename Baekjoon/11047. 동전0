@@ -1,0 +1,36 @@
+package BJ_11047_동전0;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N; // 동전의 종류
+	static int K; // 가치의 합
+	static int[] coins;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+
+		coins = new int[N];
+		
+		for (int i = 0; i < N; i++) {
+			coins[i] = Integer.parseInt(br.readLine());
+		}
+
+		int cnt = 0;
+		for (int i = N - 1; i >= 0; i--) {
+			if (coins[i] <= K) { // 현재 동전의 가치가 K보다 작거나 같으면 구성에 추가
+				cnt += (K / coins[i]);
+				K %= coins[i]; // K를 현재 동전을 사용하고 남은 금액으로 갱신
+			}
+		}
+		
+		System.out.println(cnt);
+	}
+}
