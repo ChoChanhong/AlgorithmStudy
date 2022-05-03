@@ -1,0 +1,67 @@
+package SWEA_5643_키순서;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Solution {
+
+	static int T, N, M, count;;
+	static ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>(); // 연결리스트
+	static int[] student; // 키 순서를 알 수 있는 조건 갯수
+	static boolean[] visit; // 방문했는지
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		T = Integer.parseInt(br.readLine());
+
+		for (int t = 1; t <= T; t++) {
+			N = Integer.parseInt(br.readLine());
+			M = Integer.parseInt(br.readLine());
+
+			list.clear(); // 테케 돌때마다 리스트 초기화
+			student = new int[N + 1];
+
+			for (int i = 0; i <= N; i++) {
+				list.add(new ArrayList<Integer>());
+			}
+
+			StringTokenizer st = null;
+			for (int i = 0; i < M; i++) {
+				st = new StringTokenizer(br.readLine());
+				int from = Integer.parseInt(st.nextToken());
+				int to = Integer.parseInt(st.nextToken());
+				list.get(from).add(to); // 방향이 있기에 from에서 to로 만
+			}
+
+			for (int i = 1; i <= N; i++) {
+				visit = new boolean[N + 1]; // 노드가 바뀔때마다 방문 초기화
+				dfs(i, i); // dfs시작
+			}
+
+			count = 0; // 몇명이 키순서를 알 수 있는지
+			for (int i = 1; i <= N; i++) {
+				System.out.println(student[i]);
+				if (student[i] == N - 1) { // 조건이 N-1개이면 각 노드간의 관계를 모드 알고 있어 그 노드의 키 순서를 알 수 있다.
+					count++;
+				}
+			}
+			System.out.println("#" + t + " " + count);
+		}
+
+	}
+
+	static void dfs(int idx, int fidx) { // 첫번째 파라미터는 각노드에서 움직일 수 있는 노드들(자기 자신한테 들어오는 노드의 횟수를 카운트)이고,
+		visit[idx] = true; // 두번째 파라미터는 dfs가 끝날 때 까지 고정되어 시작되는 노드에서 몇개의 노드까지 퍼져나가는지의 횟수를 위해 사용된다.
+
+		for (int i : list.get(idx)) {
+			if (visit[i])
+				continue; // 방문했으면 넘어간다.
+			student[fidx]++; // 처음노드에서 도달할수있는 노드임으로 처음노드횟수를 증가
+			student[i]++; // 처음노드에서 갈 수 있는 노드로 갈수 있는 노드의 횟수를 증가
+			dfs(i, fidx); // 갈수 있는 노드로 dfs해준다.
+		}
+	}
+}
