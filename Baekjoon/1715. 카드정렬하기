@@ -1,0 +1,35 @@
+package BJ_1715_카드정렬하기;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+
+// 작은 거끼리 먼저 묶는게 최소
+public class Main {
+	
+	static int N; // 카드 묶음 수
+	
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		
+		PriorityQueue<Integer> pq = new PriorityQueue<>();
+		for (int i = 0; i < N; i++) {
+			int temp = Integer.parseInt(br.readLine());
+			pq.add(temp);
+		}
+		
+		int sum = 0;
+		int total = 0;
+		
+		while ( pq.size() != 1 ) { // 우선순위 큐에 카드 묶음이 하나 남을때까지 
+			sum = pq.remove() + pq.remove();
+			
+			total += sum;
+			
+			pq.add(sum);
+		}
+		System.out.println(total);
+	}
+}
